@@ -5,5 +5,6 @@ import org.springframework.core.task.TaskRejectedException;
 public enum FriendRequestStatus {
     PENDING,
     ACCEPTED,
-    TaskRejectedException
+    REJECTED,
+    TaskRejectedException,
 }
