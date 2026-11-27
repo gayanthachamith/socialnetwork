@@ -8,15 +8,13 @@ import org.springframework.context.annotation.Import;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RestController;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @WebMvcTest(controllers = TestSecurityEndpointsController.class)
 @Import(SecurityConfig.class)
-@ActiveProfiles("test")
+@ActiveProfiles("test-security-endpoints")
 class SecurityConfigTest {
 
     @Autowired
@@ -49,21 +47,3 @@ class SecurityConfigTest {
     }
 }
 
-@RestController
-class TestSecurityEndpointsController {
-
-    @GetMapping("/register")
-    String register() {
-        return "register";
-    }
-
-    @GetMapping("/feed")
-    String feed() {
-        return "feed";
-    }
-
-    @GetMapping("/admin/users")
-    String adminUsers() {
-        return "admin-users";
-    }
-}
