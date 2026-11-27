@@ -148,14 +148,21 @@ public class WebPageController {
     @PostMapping("/feed/friends/{requestId}/respond")
     public String respondFriendRequest(@PathVariable Long requestId,
                                        @RequestParam FriendRequestStatus decision,
-                                       Principal principal) {
-        String callerEmail = principal.getName();
-        if (decision == FriendRequestStatus.ACCEPTED) {
-            friendRequestService.acceptRequest(requestId, callerEmail);
-        } else if (decision == FriendRequestStatus.REJECTED) {
-            friendRequestService.rejectRequest(requestId, callerEmail);
-        } else {
-            throw new IllegalArgumentException("Unsupported friend request decision: " + decision);
+                                       Principal principal,
+                                       RedirectAttributes redirectAttributes) {
+        try {
+            String callerEmail = principal.getName();
+            if (decision == FriendRequestStatus.ACCEPTED) {
+                friendRequestService.acceptRequest(requestId, callerEmail);
+                redirectAttributes.addFlashAttribute("successMessage", "Friend request accepted.");
+            } else if (decision == FriendRequestStatus.REJECTED) {
+                friendRequestService.rejectRequest(requestId, callerEmail);
+                redirectAttributes.addFlashAttribute("successMessage", "Friend request declined.");
+            } else {
+                redirectAttributes.addFlashAttribute("errorMessage", "Unsupported decision: " + decision);
+            }
+        } catch (Exception ex) {
+            redirectAttributes.addFlashAttribute("errorMessage", ex.getMessage());
         }
         return "redirect:/feed";
     }
